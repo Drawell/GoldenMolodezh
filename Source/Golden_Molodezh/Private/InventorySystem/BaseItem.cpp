@@ -2,14 +2,23 @@
 
 
 #include "BaseItem.h"
+#include "Inventory.h"
 
 // Sets default values
 ABaseItem::ABaseItem()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	bCanBeUsed = false;
+	//bCanBeUsed = false;
+	bPickedUp = false;
 	MaxStackSize = 1;
+	Amount = 1;
+	USphereComponent* Shpere = CreateDefaultSubobject<USphereComponent>("RootSphere");
+	Shpere->SetSphereRadius(16);
+	Shpere->SetCollisionProfileName(TEXT("OverlapInventory"));
+	Shpere->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::BeginOverlap);
+
+	RootComponent = Shpere;
 
 }
 
@@ -20,6 +29,22 @@ void ABaseItem::BeginPlay()
 	
 }
 
+void ABaseItem::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (bPickedUp)
+		return;
+
+	if (OtherActor == nullptr)
+		return;
+
+	AInventory* inventory = Cast<AInventory>(OtherActor);
+	if (inventory == nullptr)
+		return;
+
+	inventory->AddItem(this);
+
+}
+
 // Called every frame
 void ABaseItem::Tick(float DeltaTime)
 {
@@ -27,7 +52,33 @@ void ABaseItem::Tick(float DeltaTime)
 
 }
 
-void ABaseItem::Use()
+void ABaseItem::CopyParams(ABaseItem* other)
 {
+	/*
+		Name;
+		Description;
+		Category;
+		Icon;
+		bCanBeUsed;
+		UseText;
+		MaxStackSize;
+		Amount;
+		bPickedUp;
+		*/
 }
+
+void ABaseItem::ThrowToWorld(FVector WorldOffset)
+{
+	bPickedUp = false;
+	SetActorHiddenInGame(false);
+	SetActorRelativeLocation(FVector::ZeroVector);
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	AddActorWorldOffset(WorldOffset);
+}
+
+void ABaseItem::Use(ABaseChar* User)
+{
+	UseBluePrintImplemetnation(User);
+}
+
 

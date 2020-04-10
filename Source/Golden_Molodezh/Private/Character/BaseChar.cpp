@@ -155,19 +155,36 @@ void ABaseChar::BuildComponentHierarchy()
 	//RightLegSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RightLegSprite"));
 
 
-	/*
-	const int sprites_count = 8;
+	
+	const int sprites_count = 13;
 	UPaperSpriteComponent* sprites[sprites_count] =
 	{
+		HandSprite,
 		HeadSprite,
+		LeftEyeSprite,
+		RightEyeSprite,
 		BodySprite,
 		LeftLegSprite,
 		RightLegSprite,
 		SideHeadSprite,
+		SideEyeLeftSprite,
+		SideEyeRightSprite,
 		SideBodySprite,
 		SideLeftLegSprite,
 		SideRightLegSprite,
-	};*/
+	};
+
+
+	static ConstructorHelpers::FObjectFinder<UMaterial>
+		material_asset(TEXT("/Game/Material/MyDefaultSpriteMaterial.MyDefaultSpriteMaterial"));
+
+	for (int i = 0; i < sprites_count; i++)
+	{
+		sprites[i]->SetGenerateOverlapEvents(false);
+		sprites[i]->SetMaterial(0, material_asset.Object);
+		sprites[i]->CastShadow = true;
+	}
+
 }
 
 void ABaseChar::InitSprites()

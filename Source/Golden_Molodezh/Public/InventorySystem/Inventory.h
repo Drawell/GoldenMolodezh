@@ -2,9 +2,13 @@
 
 #pragma once
 
-#include "BaseItem.h"
+//#ifndef INVENTORY_H
+//#define INVENTORY_H
 
+#include "BaseItem.h"
+#include "Engine.h"
 #include "CoreMinimal.h"
+#include "BaseChar.h"
 #include "GameFramework/Actor.h"
 #include "Inventory.generated.h"
 
@@ -16,20 +20,20 @@ struct FSlot
 
 		UPROPERTY()
 		TArray<ABaseItem*> Items;
-		
+
 	int Num()
 	{
 		return Items.Num();
 	}
 
-	void Add(ABaseItem* item)
+	void Add(ABaseItem* Item)
 	{
-		Items.Add(item);
+		Items.Add(Item);
 	}
 
-	ABaseItem* Get(int index)
+	ABaseItem* Get(int Index)
 	{
-		return Items[index];
+		return Items[Index];
 	}
 
 	ABaseItem* Last()
@@ -41,11 +45,16 @@ struct FSlot
 	{
 		return Items.Pop(true);
 	}
-	   
+
 	FSlot()
 	{
 	}
 };
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSlotChangeEvent, int, SlotIndex);
+
+
 
 UCLASS()
 class GOLDEN_MOLODEZH_API AInventory : public AActor
@@ -58,12 +67,7 @@ public:
 
 private:
 
-	//Contains slots. in one slot can be few items.
-	//UPROPERTY(VisibleAnyWhere, Category = Inventory)
-		TArray<FSlot> Slots;
-
-	//UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = Inventory)
-	//TArray<uint32> ItemsInSlots;
+	TArray<ABaseItem*> Slots;
 
 protected:
 	// Called when the game starts or when spawned
@@ -73,24 +77,61 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 		void SetSize(int NewSize);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 		int GetSize();
 
-	UFUNCTION(BlueprintCallable)
-		bool AddItem(ABaseItem* item);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		bool AddItem(ABaseItem* Item);
 
-	UFUNCTION(BlueprintCallable)
-		bool IsSlotEmpty(int index);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		ABaseItem* PutItem(ABaseItem* Item, int Index);
 
-	UFUNCTION(BlueprintCallable)
-		ABaseItem* GetItem(int index);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		bool IsSlotEmpty(int Index);
 
-	UFUNCTION(BlueprintCallable)
-		int GetItemCount(int index);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		ABaseItem* GetItem(int Index);
 
-	UFUNCTION(BlueprintCallable)
-		ABaseItem* PopItem(int index);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		int GetItemCount(int Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		ABaseItem* PopItem(int Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		ABaseItem* PopItems(int Index, int Amount);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		int RemoveItem(int Index, int Amount);
+
+
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		bool SwapSlots(int IndexFirst, int IndexSecond);
+
+
+
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		bool UseItemAtIndex(int Index, ABaseChar* User);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+		TArray<ABaseItem*>& GetSlots();
+
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+		FSlotChangeEvent OnSlotChanged;
+
+	//DECLARE_EVENT_OneParam(AInventory, FSlotChangeEvent1, int)
+	//FSlotChangeEvent1 OnSlotChanged1() { return ChangedEvent; }
+
+	//UPROPERTY(BlueprintAssignable, Category = "Inventory")
+		//FSlotChangeEvent1 ChangedEvent;
+
+
 };
+
+//#endif // !INVENTORY_H
