@@ -8,7 +8,7 @@ ABaseChar::ABaseChar()
 
 }
 
-ABaseChar::ABaseChar(const FObjectInitializer & ObjectInitializer)
+ABaseChar::ABaseChar(const FObjectInitializer& ObjectInitializer)
 {
 	BuildComponentHierarchy();
 	InitSprites();
@@ -18,6 +18,18 @@ ABaseChar::ABaseChar(const FObjectInitializer & ObjectInitializer)
 ABaseChar::~ABaseChar()
 {
 
+}
+
+void ABaseChar::CreateBackPack()
+{
+	BackPackSize = 16;
+	FActorSpawnParameters Parameters;
+	Parameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	BackPack = this->GetWorld()->SpawnActor<ABackPack>(FVector::ZeroVector, FRotator::ZeroRotator, Parameters);
+	BackPack->SetActorRelativeLocation(FVector::ZeroVector);
+	BackPack->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+	BackPack->SetSize(BackPackSize);
 }
 
 void ABaseChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -54,13 +66,17 @@ void ABaseChar::ShowLeft()
 
 void ABaseChar::BuildComponentHierarchy()
 {
+	RootBoxCollision->SetBoxExtent(FVector(6, 14, 16));
+	HitBox->SetBoxExtent(FVector(9, 20, 16));
+	HitBox->SetRelativeLocation(FVector(0, -3, 0));
+
 	Skelet = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skelet"));
 	Skelet->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 		skelet_asset(TEXT("SkeletalMesh'/Game/Characters/BaseChar/Resources/baseCharArm_run.baseCharArm_run'"));
 	Skelet->SetSkeletalMesh(skelet_asset.Object);
 	Skelet->SetWorldTransform(FTransform(FRotator(0., 0., -70.),
-		FVector(0, 8.028848, -7.178971), FVector(0.17, 0.17, 0.17)));
+		FVector(0.000000, 16.828100, -9.317459), FVector(0.17, 0.17, 0.17)));
 
 
 	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> FoundAnimBP(TEXT("AnimBlueprint'/Game/Characters/BaseChar/Resources/bc_AnimBlueprint.bc_AnimBlueprint'"));
@@ -98,7 +114,7 @@ void ABaseChar::BuildComponentHierarchy()
 
 	LeftLegSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("LeftLegSprite"));
 	LeftLegSprite->AttachToComponent(Skelet, FAttachmentTransformRules::KeepRelativeTransform, "leftLegSocket");
-	LeftLegSprite->SetRelativeLocation(FVector(0.000000, 0.000000, 6));
+	LeftLegSprite->SetRelativeLocation(FVector(1, 0.000000, 6));
 	FrontComponents.Add(LeftLegSprite);
 
 	RightLegSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RightLegSprite"));
@@ -148,14 +164,14 @@ void ABaseChar::BuildComponentHierarchy()
 	Camera->SetProjectionMode(ECameraProjectionMode::Perspective);
 	Camera->SetFieldOfView(90);
 
-	
+
 
 	//LeftLegSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("LeftLegSprite"));
 
 	//RightLegSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("RightLegSprite"));
 
 
-	
+
 	const int sprites_count = 13;
 	UPaperSpriteComponent* sprites[sprites_count] =
 	{
@@ -183,7 +199,14 @@ void ABaseChar::BuildComponentHierarchy()
 		sprites[i]->SetGenerateOverlapEvents(false);
 		sprites[i]->SetMaterial(0, material_asset.Object);
 		sprites[i]->CastShadow = true;
+		sprites[i]->SetCollisionProfileName("NoCollision");
 	}
+
+}
+
+void ABaseChar::BeginPlay()
+{
+	Super::BeginPlay();
 
 }
 

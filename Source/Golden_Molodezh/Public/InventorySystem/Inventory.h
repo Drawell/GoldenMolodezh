@@ -8,52 +8,11 @@
 #include "BaseItem.h"
 #include "Engine.h"
 #include "CoreMinimal.h"
-#include "BaseChar.h"
 #include "GameFramework/Actor.h"
 #include "Inventory.generated.h"
 
 
-USTRUCT()
-struct FSlot
-{
-	GENERATED_USTRUCT_BODY()
-
-		UPROPERTY()
-		TArray<ABaseItem*> Items;
-
-	int Num()
-	{
-		return Items.Num();
-	}
-
-	void Add(ABaseItem* Item)
-	{
-		Items.Add(Item);
-	}
-
-	ABaseItem* Get(int Index)
-	{
-		return Items[Index];
-	}
-
-	ABaseItem* Last()
-	{
-		return Items.Last();
-	}
-
-	ABaseItem* Pop()
-	{
-		return Items.Pop(true);
-	}
-
-	FSlot()
-	{
-	}
-};
-
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSlotChangeEvent, int, SlotIndex);
-
 
 
 UCLASS()
@@ -113,10 +72,8 @@ public:
 		bool SwapSlots(int IndexFirst, int IndexSecond);
 
 
-
-
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-		bool UseItemAtIndex(int Index, ABaseChar* User);
+		bool UseItemAtIndex(int Index, AActor* User);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 		TArray<ABaseItem*>& GetSlots();

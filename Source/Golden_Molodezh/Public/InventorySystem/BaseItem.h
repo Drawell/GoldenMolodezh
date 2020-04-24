@@ -6,7 +6,6 @@
 
 #include "Engine/Texture2D.h"
 #include "Components/SphereComponent.h"
-#include "BaseChar.h"
 #include "Engine.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -32,7 +31,10 @@ public:
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Item)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
+		USphereComponent* Shpere;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 		FText Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
@@ -74,16 +76,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void CopyParams(ABaseItem* other);
+	UFUNCTION(BlueprintCallable, Category = "Item")
+		virtual void PickUp();
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
 		virtual void ThrowToWorld(FVector WorldOffset);
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-		virtual void Use(ABaseChar* User);
+		virtual void Use(AActor* User);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Item")
-		void UseBluePrintImplemetnation(ABaseChar* User);
+		void UseBluePrintImplemetnation(AActor* User);
 };
 
 //#endif // !BASE_ITEM_H

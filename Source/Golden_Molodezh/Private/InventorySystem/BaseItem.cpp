@@ -13,7 +13,7 @@ ABaseItem::ABaseItem()
 	bPickedUp = false;
 	MaxStackSize = 1;
 	Amount = 1;
-	USphereComponent* Shpere = CreateDefaultSubobject<USphereComponent>("RootSphere");
+	Shpere = CreateDefaultSubobject<USphereComponent>("RootSphere");
 	Shpere->SetSphereRadius(16);
 	Shpere->SetCollisionProfileName(TEXT("OverlapInventory"));
 	Shpere->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::BeginOverlap);
@@ -52,31 +52,28 @@ void ABaseItem::Tick(float DeltaTime)
 
 }
 
-void ABaseItem::CopyParams(ABaseItem* other)
+void ABaseItem::PickUp()
 {
-	/*
-		Name;
-		Description;
-		Category;
-		Icon;
-		bCanBeUsed;
-		UseText;
-		MaxStackSize;
-		Amount;
-		bPickedUp;
-		*/
+	bPickedUp = true;
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	SetActorRelativeLocation(FVector::ZeroVector);
+
 }
+
 
 void ABaseItem::ThrowToWorld(FVector WorldOffset)
 {
-	bPickedUp = false;
-	SetActorHiddenInGame(false);
 	SetActorRelativeLocation(FVector::ZeroVector);
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	AddActorWorldOffset(WorldOffset);
+	AddActorWorldOffset(WorldOffset, false, nullptr, ETeleportType::TeleportPhysics);
+	bPickedUp = false;
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+	
 }
 
-void ABaseItem::Use(ABaseChar* User)
+void ABaseItem::Use(AActor* User)
 {
 	UseBluePrintImplemetnation(User);
 }

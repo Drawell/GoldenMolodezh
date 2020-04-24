@@ -10,12 +10,20 @@ ASideBasePawn::ASideBasePawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootBoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
+	RootBoxCollision->SetCollisionProfileName(TEXT("Pawn"));
 	RootBoxCollision->SetBoxExtent(FVector(16));
 	RootComponent = RootBoxCollision;
+
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	HitBox->SetCollisionProfileName(TEXT("OverlapHitBox"));
+	HitBox->SetBoxExtent(FVector(16));
+	HitBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	MoveComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("PawnMoveComp"));
 	MoveComponent->UpdatedComponent = RootBoxCollision;
 	MovementVector.Z = -1;
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +38,7 @@ void ASideBasePawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	AddMovementInput(MovementVector);
 	CalculateAnimationAndPosition();
+	//Health = Health >= MaxHealth ? MaxHealth : MaxHealth + HealthRegeneration / 1000;
 }
 
 // Called to bind functionality to input

@@ -53,9 +53,7 @@ bool AInventory::AddItem(ABaseItem* Item)
 			if (Item->MaxStackSize <= 1) // can be only one in slot
 			{
 				Slots[i] = Item;
-				Item->bPickedUp = true;
-				Item->SetActorHiddenInGame(true);
-				Item->SetActorRelativeLocation(FVector::ZeroVector);
+				Item->PickUp();
 				Item->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 				if (OnSlotChanged.IsBound()) OnSlotChanged.Broadcast(i);
 
@@ -86,9 +84,7 @@ bool AInventory::AddItem(ABaseItem* Item)
 	if (firstEmptySlotIndex >= 0)
 	{
 		Slots[firstEmptySlotIndex] = Item;
-		Item->bPickedUp = true;
-		Item->SetActorHiddenInGame(true);
-		Item->SetActorRelativeLocation(FVector::ZeroVector);
+		Item->PickUp();
 		Item->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 
 		if (OnSlotChanged.IsBound()) OnSlotChanged.Broadcast(firstEmptySlotIndex);
@@ -238,7 +234,7 @@ bool AInventory::SwapSlots(int IndexFirst, int IndexSecond)
 }
 
 
-bool AInventory::UseItemAtIndex(int Index, ABaseChar* User)
+bool AInventory::UseItemAtIndex(int Index, AActor* User)
 {
 	if (!Slots.IsValidIndex(Index))
 		return false;

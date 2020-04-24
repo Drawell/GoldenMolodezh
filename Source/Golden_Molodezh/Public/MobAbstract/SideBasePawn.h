@@ -3,8 +3,7 @@
 #pragma once
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
-
-
+#include "HealthComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -34,8 +33,14 @@ public:
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = Collision)
 		UBoxComponent* RootBoxCollision;
 
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = Collision)
+		UBoxComponent* HitBox;
+
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = Movement)
 		UFloatingPawnMovement* MoveComponent;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = Movement)
+		UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = State)
 		EAnimStateEnum AnimState;
@@ -45,7 +50,6 @@ public:
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = State)
 		TArray<UPrimitiveComponent*> FrontComponents;
-
 
 private:
 	FVector MovementVector;

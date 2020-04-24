@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include "BackPack.h"
 
 #include "Engine.h"
 #include "CoreMinimal.h"
@@ -86,7 +86,18 @@ public:
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
+		ABackPack* BackPack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory)
+		int BackPackSize;
+
 public:
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void CreateBackPack();
+
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	virtual void ShowFront() override;
@@ -98,6 +109,7 @@ private:
 	void BuildComponentHierarchy();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void InitSprites();
 
 
