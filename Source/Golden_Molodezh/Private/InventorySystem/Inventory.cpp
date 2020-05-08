@@ -108,6 +108,8 @@ ABaseItem* AInventory::PutItem(ABaseItem* Item, int Index)
 	//Just put in slot
 	if (Slots[Index] == nullptr)
 	{
+		Item->PickUp();
+		Item->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		Slots[Index] = Item;
 	}
 	//Same class and slot in inventory not full
@@ -129,6 +131,8 @@ ABaseItem* AInventory::PutItem(ABaseItem* Item, int Index)
 	}
 	else { //different classes or slot in inventry full. Swap Items
 		itemToReturn = Slots[Index];
+		Item->PickUp();
+		Item->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		Slots[Index] = Item;
 	}
 

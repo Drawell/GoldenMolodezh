@@ -26,6 +26,14 @@ ASideBasePawn::ASideBasePawn()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
+TArray<UPrimitiveComponent*>& ASideBasePawn::GetComponentArray(uint8 side)
+{
+	if (side == LEFT_SIDE) return LeftComponents;
+	else if (side == RIGHT_SIDE) return RightComponents;
+	else if (side == BACK_SIDE) return BackComponents;
+	else return FrontComponents;
+}
+
 // Called when the game starts or when spawned
 void ASideBasePawn::BeginPlay()
 {
@@ -50,41 +58,66 @@ void ASideBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ASideBasePawn::ShowFront()
 {
-	for (auto comp : FrontComponents)	
-		comp->SetHiddenInGame(false);
-	
-	for (auto comp : LeftComponents)	
+	if (PresentSide == FRONT_SIDE)
+		return;	
+
+	TArray<UPrimitiveComponent*> PastComponents = GetComponentArray(PresentSide);
+	PresentSide = FRONT_SIDE;
+
+	for (auto comp : PastComponents)
 		comp->SetHiddenInGame(true);
+
+	for (auto comp : FrontComponents)
+		comp->SetHiddenInGame(false);
 
 }
 
 void ASideBasePawn::ShowBack()
 {
-	for (auto comp : FrontComponents)
-		comp->SetHiddenInGame(false);
+	if (PresentSide == BACK_SIDE)
+		return;
 
-	for (auto comp : LeftComponents)
+	TArray<UPrimitiveComponent*> PastComponents = GetComponentArray(PresentSide);
+	PresentSide = BACK_SIDE;
+
+	for (auto comp : PastComponents)
 		comp->SetHiddenInGame(true);
+
+	for (auto comp : BackComponents)
+		comp->SetHiddenInGame(false);
 }
 
 void ASideBasePawn::ShowRight()
-{	
-	for (auto comp : LeftComponents)
-		comp->SetHiddenInGame(false);
+{
+	if (PresentSide == RIGHT_SIDE)
+		return;	
 
-	for (auto comp : FrontComponents)
+	TArray<UPrimitiveComponent*> PastComponents = GetComponentArray(PresentSide);
+	PresentSide = RIGHT_SIDE;
+
+	for (auto comp : PastComponents)
 		comp->SetHiddenInGame(true);
+
+	for (auto comp : RightComponents)
+		comp->SetHiddenInGame(false);
 
 }
 
 void ASideBasePawn::ShowLeft()
 {
+	if (PresentSide == LEFT_SIDE)
+		return;
+
+	TArray<UPrimitiveComponent*> PastComponents = GetComponentArray(PresentSide);
+	PresentSide = LEFT_SIDE;
+
+	for (auto comp : PastComponents)
+		comp->SetHiddenInGame(true);
+
 	for (auto comp : LeftComponents)
 		comp->SetHiddenInGame(false);
-
-	for (auto comp : FrontComponents)
-		comp->SetHiddenInGame(true);
 }
+
 
 void ASideBasePawn::CalculateAnimationAndPosition()
 {

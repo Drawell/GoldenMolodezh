@@ -46,13 +46,27 @@ public:
 		EAnimStateEnum AnimState;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = State)
+		TArray<UPrimitiveComponent*> RightComponents;
+
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = State)
 		TArray<UPrimitiveComponent*> LeftComponents;
 
 	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = State)
 		TArray<UPrimitiveComponent*> FrontComponents;
 
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = State)
+		TArray<UPrimitiveComponent*> BackComponents;
+
+protected:
+	uint8 PresentSide = FRONT_SIDE;
+
 private:
-	FVector MovementVector;
+	FVector MovementVector;	
+	const uint8 LEFT_SIDE = 0;
+	const uint8 RIGHT_SIDE = 1;
+	const uint8 FRONT_SIDE = 2;
+	const uint8 BACK_SIDE = 3;
+	TArray<UPrimitiveComponent*>& GetComponentArray(uint8 side);
 
 protected:
 	// Called when the game starts or when spawned

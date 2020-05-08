@@ -40,7 +40,7 @@ void AMeleeWeaponBase::StartUse(float X, float Y)
 	start *= DistanceMin;
 	start.Z = StartZ;
 
-	SetActorRelativeLocation(start);
+	SetActorRelativeLocation(start, false, nullptr, ETeleportType::TeleportPhysics);
 	Super::StartUse(X, Y);
 }
 
@@ -107,7 +107,6 @@ void AMeleeWeaponBase::Tick(float DeltaTime)
 		RotationPart->GetRelativeRotation().Pitch,
 		newYaw + 90,
 		RotationPart->GetRelativeRotation().Roll));
-	//Calculate New Lockation
 
 }
 

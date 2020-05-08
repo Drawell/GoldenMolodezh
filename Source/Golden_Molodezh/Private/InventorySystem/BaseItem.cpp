@@ -19,6 +19,7 @@ ABaseItem::ABaseItem()
 	Shpere->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::BeginOverlap);
 
 	RootComponent = Shpere;
+	Category = EItemCategoryEnum::ICE_Useless;
 
 }
 

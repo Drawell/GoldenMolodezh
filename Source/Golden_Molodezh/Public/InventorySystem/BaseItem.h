@@ -14,9 +14,23 @@
 UENUM(BlueprintType)		//"BlueprintType" is essential to include
 enum class EItemCategoryEnum : uint8
 {
-	ICE_Useless		UMETA(DisplayName = "Useless"),
-	ICE_Consumable 	UMETA(DisplayName = "Consumable"),
-	ICE_Equipment 	UMETA(DisplayName = "Equipment")
+	ICE_Useless = 0 UMETA(DisplayName = "Useless"),
+	ICE_Consumable = 1 UMETA(DisplayName = "Consumable"),
+	//ICE_Equipment  = 2  UMETA(DisplayName = "Equipment")
+
+	//Weapon
+	ICE_WeaponTwoHand = 10 UMETA(DisplayName = "Two Hand Weapon"),
+	ICE_WeaponBothHand = 11 UMETA(DisplayName = "Both Hand Weapon"),
+	ICE_WeaponOnlyLeftHand = 12 UMETA(DisplayName = "Only Left Hand Weapon"),
+	ICE_WeaponOnlyRightHand = 13 UMETA(DisplayName = "Only Right Hand Weapon"),
+
+	//Armor
+	ICE_ArmorHelmet = 20 UMETA(DisplayName = "Helmet"),
+	ICE_ArmorChest = 21 UMETA(DisplayName = "Chest"),
+	ICE_ArmorBoot = 22 UMETA(DisplayName = "Boot"),
+	ICE_ArmorNecklace = 23 UMETA(DisplayName = "Necklace"),
+	ICE_ArmorAmulet = 24 UMETA(DisplayName = "Amulet"),
+
 
 };
 
