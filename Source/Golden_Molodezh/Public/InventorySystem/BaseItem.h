@@ -46,7 +46,7 @@ public:
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
-		USphereComponent* Shpere;
+		USphereComponent* RootShpere;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Item)
 		FText Name;

@@ -7,25 +7,26 @@ AWeaponBase::AWeaponBase()
 	:Super()
 {
 	Category = EItemCategoryEnum::ICE_WeaponBothHand;
+	Amount = 1;
 }
 
-void AWeaponBase::StartUse(float X, float Y)
+void AWeaponBase::StartMove(float X, float Y)
 {	
 	StartX = X;
 	StartY = Y;
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
-	bIsUsing = true;
+	bIsMoving = true;
 }
 
-void AWeaponBase::ContinueUse(float X, float Y)
+void AWeaponBase::ContinueMove(float ToX, float ToY)
 {
 
 }
 
-void AWeaponBase::StopUse(float X, float Y)
+void AWeaponBase::StopMove(float X, float Y)
 {
-	bIsUsing = false;
+	bIsMoving = false;
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
 

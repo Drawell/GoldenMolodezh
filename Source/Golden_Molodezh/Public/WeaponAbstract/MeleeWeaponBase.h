@@ -4,14 +4,14 @@
 #include "Components/SphereComponent.h"
 
 #include "CoreMinimal.h"
-#include "WeaponAbstract/WeaponBase.h"
+#include "WeaponAbstract/FollowingWeapon.h"
 #include "MeleeWeaponBase.generated.h"
 
 /**
  *
  */
 UCLASS()
-class GOLDEN_MOLODEZH_API AMeleeWeaponBase : public AWeaponBase
+class GOLDEN_MOLODEZH_API AMeleeWeaponBase : public AFollowingWeapon
 {
 	GENERATED_BODY()
 
@@ -21,22 +21,10 @@ public:
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
-		USphereComponent* RotationPart;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
 		USphereComponent* HardPart;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
 		USphereComponent* DamagePart;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
-		int DistanceMax;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
-		int DistanceMin;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
-		int MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponMelee)
 		float DamageRate;
@@ -44,18 +32,8 @@ public:
 
 	FTimerHandle DamageRateTimerHandler;
 
-protected:
-	FVector Destination;
-	FVector PrevLocation;
-	//static const int KoefFromScreenToLocal = 400;
-	bool bNeedToMove = false;
-	bool bCanDamage = true;
-	int StartZ = 16;
 
 public:
-	virtual void StartUse(float X, float Y) override;
-	virtual void ContinueUse(float X, float Y) override;
-	virtual void StopUse(float X, float Y) override;
 
 	UFUNCTION()
 		void BeginOverlapDamagePart(UPrimitiveComponent* OverlappedComponent,
@@ -69,7 +47,7 @@ public:
 		void OnCanDamage();
 
 protected:
-	virtual void Tick(float DeltaTime) override;
+
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 };

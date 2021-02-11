@@ -13,12 +13,12 @@ ABaseItem::ABaseItem()
 	bPickedUp = false;
 	MaxStackSize = 1;
 	Amount = 1;
-	Shpere = CreateDefaultSubobject<USphereComponent>("RootSphere");
-	Shpere->SetSphereRadius(16);
-	Shpere->SetCollisionProfileName(TEXT("OverlapInventory"));
-	Shpere->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::BeginOverlap);
+	RootShpere = CreateDefaultSubobject<USphereComponent>("RootSphere");
+	RootShpere->SetSphereRadius(16);
+	RootShpere->SetCollisionProfileName(TEXT("OverlapInventory"));
+	RootShpere->OnComponentBeginOverlap.AddDynamic(this, &ABaseItem::BeginOverlap);
 
-	RootComponent = Shpere;
+	RootComponent = RootShpere;
 	Category = EItemCategoryEnum::ICE_Useless;
 
 }
@@ -59,7 +59,6 @@ void ABaseItem::PickUp()
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
 	SetActorRelativeLocation(FVector::ZeroVector);
-
 }
 
 

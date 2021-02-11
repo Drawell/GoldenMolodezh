@@ -121,20 +121,23 @@ void ASideBasePawn::ShowLeft()
 
 void ASideBasePawn::CalculateAnimationAndPosition()
 {
-	if (FMath::IsNearlyZero(MovementVector.X) && FMath::IsNearlyZero(MovementVector.Y))
+	
+	if (FMath::IsNearlyZero(MoveComponent->Velocity.X) && FMath::IsNearlyZero(MoveComponent->Velocity.Y))
 	{
-		AnimState = EAnimStateEnum::ASE_Idle;
+		if (AnimState != EAnimStateEnum::ASE_Idle)
+			ChangeAnimState(EAnimStateEnum::ASE_Idle);
 		return;
 	}
 
-	AnimState = EAnimStateEnum::ASE_Run;
+	if (AnimState != EAnimStateEnum::ASE_Run)
+		ChangeAnimState(EAnimStateEnum::ASE_Run);
 
-	if (MovementVector.Y > 0)
+	if (MoveComponent->Velocity.Y > 0)
 	{ 
 		// Front
-		if (MovementVector.Y > (MovementVector.X > 0 ? MovementVector.X : -MovementVector.X))
+		if (MoveComponent->Velocity.Y > (MoveComponent->Velocity.X > 0 ? MoveComponent->Velocity.X : -MoveComponent->Velocity.X))
 			ShowFront();
-		else if (MovementVector.X > 0)
+		else if (MoveComponent->Velocity.X > 0)
 			ShowRight();
 		else
 			ShowLeft();
@@ -142,9 +145,9 @@ void ASideBasePawn::CalculateAnimationAndPosition()
 	else
 	{
 		//Back
-		if (-MovementVector.Y > (MovementVector.X > 0 ? MovementVector.X : -MovementVector.X))
+		if (-MoveComponent->Velocity.Y > (MoveComponent->Velocity.X > 0 ? MoveComponent->Velocity.X : -MoveComponent->Velocity.X))
 			ShowBack();
-		else if (MovementVector.X > 0)
+		else if (MoveComponent->Velocity.X > 0)
 			ShowRight();
 		else
 			ShowLeft();
@@ -160,4 +163,10 @@ void ASideBasePawn::MoveX(float Value)
 void ASideBasePawn::MoveY(float Value)
 {
 	MovementVector.Y = Value;
+}
+
+void ASideBasePawn::ChangeAnimState(EAnimStateEnum NewAnimState)
+{
+	AnimState = NewAnimState;
+	ChangeAnimStateImplemetnation(NewAnimState);
 }

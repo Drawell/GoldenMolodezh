@@ -21,7 +21,7 @@ public:
 public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
-        bool bIsUsing;
+        bool bIsMoving;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
         float DamageAmount;
@@ -32,13 +32,13 @@ public:
 
 public:
     UFUNCTION(BlueprintCallable, Category = "Weapon")
-    virtual void StartUse(float X, float Y);
+    virtual void StartMove(float X, float Y);
 
     UFUNCTION(BlueprintCallable, Category = "Weapon")
-    virtual void ContinueUse(float X, float Y);
+    virtual void ContinueMove(float ToX, float ToY);
 
     UFUNCTION(BlueprintCallable, Category = "Weapon")
-    virtual void StopUse(float X, float Y);
+    virtual void StopMove(float X, float Y);
 
     virtual void Use(AActor* User) override;
 

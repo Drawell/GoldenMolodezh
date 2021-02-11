@@ -240,7 +240,7 @@ bool AInventory::SwapSlots(int IndexFirst, int IndexSecond)
 
 bool AInventory::UseItemAtIndex(int Index, AActor* User)
 {
-	if (!Slots.IsValidIndex(Index))
+	if (!Slots.IsValidIndex(Index) || Slots[Index] == nullptr)
 		return false;
 
 	Slots[Index]->Use(User);

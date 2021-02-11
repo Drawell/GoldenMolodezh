@@ -88,5 +88,11 @@ public:
 
 	virtual void MoveX(float Value);
 	virtual void MoveY(float Value);
+
+	UFUNCTION(BlueprintCallable, Category = "State")
+		virtual void ChangeAnimState(EAnimStateEnum NewAnimState);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "State")
+		void ChangeAnimStateImplemetnation(EAnimStateEnum NewAnimState);
 	
 };
